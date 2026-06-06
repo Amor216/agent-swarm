@@ -8,7 +8,11 @@ from rich.console import Console
 
 from . import orchestrator, render
 
-console = Console()
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+console = Console(legacy_windows=False, force_terminal=True)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -52,7 +56,7 @@ def _parse(argv: list[str] | None) -> argparse.Namespace:
     b = sub.add_parser("build", help="run the swarm against a requirement")
     b.add_argument("requirement", help="natural language goal, e.g. 'Snake game in vanilla HTML/JS'")
     b.add_argument("--out", default="./output", help="output directory root")
-    b.add_argument("--max-rounds", type=int, default=8, dest="max_rounds")
+    b.add_argument("--max-rounds", type=int, default=12, dest="max_rounds")
     return p.parse_args(argv)
 
 

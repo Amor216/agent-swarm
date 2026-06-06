@@ -25,7 +25,7 @@ def _noop(_: Turn) -> None:
     pass
 
 
-def run(requirement: str, workdir: Path, max_rounds: int = 8,
+def run(requirement: str, workdir: Path, max_rounds: int = 12,
         on_turn: Logger = _noop) -> SwarmResult:
     workdir = workdir.resolve()
     workdir.mkdir(parents=True, exist_ok=True)

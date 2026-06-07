@@ -41,7 +41,7 @@ def run(requirement: str, workdir: Path, max_rounds: int = 12,
     pm = PM(cost=cost)
     designer = Designer(cost=cost)
     engineer = Engineer(workdir=workdir, cost=cost)
-    qa = QA(url=url, artifacts=artifacts, cost=cost)
+    qa = QA(url=url, artifacts=artifacts, workdir=workdir, cost=cost)
     critic = Critic(workdir=workdir, cost=cost)
 
     agents = {

@@ -32,6 +32,7 @@ def main(argv: list[str] | None = None) -> int:
         max_rounds=args.max_rounds,
         on_turn=lambda t: render.panel(console, t),
         max_usd=args.max_budget,
+        resume=args.resume,
     )
 
     console.print()
@@ -60,6 +61,8 @@ def _parse(argv: list[str] | None) -> argparse.Namespace:
     b.add_argument("--max-rounds", type=int, default=12, dest="max_rounds")
     b.add_argument("--max-budget", type=float, default=None, dest="max_budget",
                    help="abort if cumulative cost in USD exceeds this cap")
+    b.add_argument("--resume", action="store_true",
+                   help="continue an existing run in <out>/<slug>/ from its saved state.json")
     return p.parse_args(argv)
 
 

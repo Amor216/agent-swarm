@@ -20,7 +20,8 @@ uv run playwright install chromium
 cp .env.example .env  # add ANTHROPIC_API_KEY
 
 uv run swarm build "Snake game in vanilla HTML/JS"
-uv run swarm build "Todo app" --max-budget 0.50  # abort if total cost crosses $0.50
+uv run swarm build "Todo app" --max-budget 0.50    # abort if total cost crosses $0.50
+uv run swarm build "Todo app" --resume             # continue a previous run from state.json
 ```
 
 The output lands under `./output/<slug>/`:

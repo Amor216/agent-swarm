@@ -31,6 +31,7 @@ def main(argv: list[str] | None = None) -> int:
         workdir=workdir,
         max_rounds=args.max_rounds,
         on_turn=lambda t: render.panel(console, t),
+        max_usd=args.max_budget,
     )
 
     console.print()
@@ -57,6 +58,8 @@ def _parse(argv: list[str] | None) -> argparse.Namespace:
     b.add_argument("requirement", help="natural language goal, e.g. 'Snake game in vanilla HTML/JS'")
     b.add_argument("--out", default="./output", help="output directory root")
     b.add_argument("--max-rounds", type=int, default=12, dest="max_rounds")
+    b.add_argument("--max-budget", type=float, default=None, dest="max_budget",
+                   help="abort if cumulative cost in USD exceeds this cap")
     return p.parse_args(argv)
 
 

@@ -5,7 +5,7 @@ from pathlib import Path
 from . import browser
 from .agents import PM, QA, Critic, Designer, Engineer
 from .channel import Channel, Turn
-from .costs import CostTracker
+from .costs import BudgetExceeded, CostTracker
 from .server import StaticServer
 
 
@@ -26,7 +26,7 @@ def _noop(_: Turn) -> None:
 
 
 def run(requirement: str, workdir: Path, max_rounds: int = 12,
-        on_turn: Logger = _noop) -> SwarmResult:
+        on_turn: Logger = _noop, max_usd: float | None = None) -> SwarmResult:
     workdir = workdir.resolve()
     workdir.mkdir(parents=True, exist_ok=True)
     artifacts = workdir / "artifacts"
@@ -35,7 +35,7 @@ def run(requirement: str, workdir: Path, max_rounds: int = 12,
     static = StaticServer(workdir)
     url = static.start()
 
-    cost = CostTracker()
+    cost = CostTracker(max_usd=max_usd)
     ch = Channel(requirement=requirement)
 
     pm = PM(cost=cost)
@@ -51,7 +51,11 @@ def run(requirement: str, workdir: Path, max_rounds: int = 12,
     try:
         speaker = "PM"
         for round_n in range(1, max_rounds + 1):
-            turn = agents[speaker].act(ch)
+            try:
+                turn = agents[speaker].act(ch)
+            except BudgetExceeded as exc:
+                _write_transcript(workdir, ch)
+                return SwarmResult(False, round_n, str(exc), cost, workdir)
             ch.append(turn)
             on_turn(turn)
 

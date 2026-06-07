@@ -10,7 +10,7 @@ A small team of LLM agents that builds a single-page web app from a one-line goa
 | QA | Sonnet (Vision) | Takes a screenshot of the running page and judges if it works |
 | Critic | Opus | Reads the code, looks at the screenshot summary, decides APPROVE or REQUEST_FIX |
 
-The orchestrator runs in rounds: each non-PM agent speaks, then the PM picks the next speaker. The loop ends when the Critic approves or after `--max-rounds` rounds.
+The orchestrator runs in rounds: each non-PM agent speaks, then the PM picks the next speaker. The loop ends when the Critic approves, after `--max-rounds` rounds, or when `--max-budget` (USD) is hit.
 
 ## Run
 
@@ -20,6 +20,7 @@ uv run playwright install chromium
 cp .env.example .env  # add ANTHROPIC_API_KEY
 
 uv run swarm build "Snake game in vanilla HTML/JS"
+uv run swarm build "Todo app" --max-budget 0.50  # abort if total cost crosses $0.50
 ```
 
 The output lands under `./output/<slug>/`:
